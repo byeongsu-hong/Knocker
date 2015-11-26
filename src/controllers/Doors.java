@@ -18,7 +18,7 @@ public class Doors {
     public Doors(double health, String doorFile, String doorName) {
         this.healthFull = health;
         this.currentHealth = health;
-        this.doorFile = doorFile;
+        this.doorFile = "../res/doors/" + doorFile;
         this.doorName = doorName;
     }
 

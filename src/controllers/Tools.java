@@ -10,26 +10,21 @@ public class Tools {
     private String toolFile;
     private String toolMethod;
 
-    public Tools(double power, String toolFile, String toolName, String toolMethod) {
+    public Tools(double power, String toolFile, String toolName) {
         this.toolName = toolName;
-        this.toolFile = "../res/" + toolFile;
-        this.toolMethod = "handle" + toolMethod;
+        this.toolFile = "../res/tools/" + toolFile;
         this.Power = power;
     }
 
     public String getToolFile() {
-        return toolFile;
-    }
-
-    public String getToolMethod() {
-        return toolMethod;
+        return this.toolFile;
     }
 
     public String getToolName() {
-        return toolName;
+        return this.toolName;
     }
 
     public double getPower() {
-        return Power;
+        return this.Power;
     }
 }
