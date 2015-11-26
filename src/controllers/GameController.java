@@ -182,7 +182,7 @@ public class GameController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         doorHealth.setProgress(1.0);
 
-        tools = new HashMap<>();
+        tools = new LinkedHashMap<>();
 
         tools.put("손", new Tools(50.0, "../res/tools/fist.png", "손", "Fist"));
         tools.put("신발", new Tools(100.0, "../res/tools/shoes.png", "신발", "Shoes"));
