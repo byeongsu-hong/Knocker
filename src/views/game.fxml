@@ -9,8 +9,7 @@
 
 <AnchorPane fx:id="View" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GameController">
    <children>
-      <Rectangle fx:id="door" arcHeight="5.0" arcWidth="5.0" fill="#3f51b5" height="393.0" layoutX="280.0" layoutY="87.0" onMouseClicked="#handleKnock" stroke="BLACK" strokeType="INSIDE" width="241.0" />
-      <Button fx:id="toolsBtn" layoutX="745.0" layoutY="87.0" mnemonicParsing="false" onAction="#openSideMenu" style="-fx-background-color: #03a9f4; -fx-background-radius: none;" text="Tools" textFill="WHITE">
+      <Button fx:id="toolsBtn" layoutX="745.0" layoutY="87.0" mnemonicParsing="false" onAction="#openSideMenu" style="-fx-background-color: #03a9f4; -fx-background-radius: 0;" text="Tools" textFill="WHITE">
          <font>
             <Font name="Arial" size="14.0" />
          </font>

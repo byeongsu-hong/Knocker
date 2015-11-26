@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.animation.Interpolator;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
@@ -13,16 +14,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+import java.lang.String;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -32,7 +33,6 @@ public class GameController implements Initializable{
 
     /** FXML resources **/
     @FXML private AnchorPane View;
-    @FXML private Rectangle door;
     @FXML private ProgressBar doorHealth;
     @FXML private Button toolsBtn;
     @FXML private ListView<HBox> toolsPanel;
@@ -46,18 +46,28 @@ public class GameController implements Initializable{
     private Map<String, Doors> doors;
     private Map<String, Tools> tools;
     private boolean isTimeToOpen = true;
+	private List<Doors> doorOrder = new ArrayList<>();
+
+	private ImageView door;
+	private Iterator<Doors> iterator;
 
     // 문의 체력을 체크하고, 만약 문의 체력이 0 이하일 경우 문을 없앤다.
     private void checkHealth() {
         if(doorHealth.getProgress() <= 1.3877787807814457E-16) {
             showNotification("\'" + currentDoor.getDoorName() + "\'이/가 파괴되었다!");
             View.getChildren().remove(door);
+			if(iterator.hasNext()) {
+				currentDoor = iterator.next();
+				door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
+				View.getChildren().add(door);
+			}
             doorHealth.setProgress(1);
+
         }
     }
 
-    // 노트를 했을 때 처리하는 메소드.
-    public void handleKnock(MouseEvent event) {
+    // 노크를 했을 때 처리하는 메소드.
+    public void handleKnock() {
         currentDoor.addDamage(currentTool.getPower());
         doorHealth.setProgress(currentDoor.getCurrentHealth() / currentDoor.getHealthFull());
         checkHealth();
@@ -130,7 +140,7 @@ public class GameController implements Initializable{
             translatePanel = new TranslateTransition();
             translatePanel.setDuration(new Duration(500));
             translatePanel.setNode(toolsPanel);
-            translatePanel.setToX(toolsPanel.getTranslateX() + 200);
+			translatePanel.setToX(toolsPanel.getTranslateX() + 200);
             translatePanel.setInterpolator(Interpolator.EASE_BOTH);
 
             isTimeToOpen = true;
@@ -174,31 +184,44 @@ public class GameController implements Initializable{
 
         tools = new HashMap<>();
 
-        tools.put("손", new Tools(50.0, "fist.png", "손", "Fist"));
-        tools.put("신발", new Tools(100.0, "shoes.png", "신발", "Shoes"));
-        tools.put("바비인형", new Tools(200.0, "bobby.png", "바비인형", "Bobby"));
-        tools.put("깔리", new Tools(300.0, "curry.png", "깔리", "Curry"));
-        tools.put("망치", new Tools(500.0, "hammer.png", "망치", "Hammer"));
-        tools.put("욱재 전광판", new Tools(1000.0, "light.png", "욱재 전광판", "Light"));
-        tools.put("수학의 정석", new Tools(2000.0, "math.jpg", "수학의 정석", "Math"));
-        tools.put("JMS", new Tools(5000.0, "teacher.jpg", "JMS의 손짓", "Teacher"));
-        tools.put("벤젠", new Tools(100000.0, "benzene.png", "벤젠", "Benzene"));
+        tools.put("손", new Tools(50.0, "../res/tools/fist.png", "손", "Fist"));
+        tools.put("신발", new Tools(100.0, "../res/tools/shoes.png", "신발", "Shoes"));
+        tools.put("바비인형", new Tools(200.0, "../res/tools/bobby.png", "바비인형", "Bobby"));
+        tools.put("깔리", new Tools(300.0, "../res/tools/curry.png", "깔리", "Curry"));
+        tools.put("망치", new Tools(500.0, "../res/tools/hammer.png", "망치", "Hammer"));
+		tools.put("욱재 전광판", new Tools(1000.0, "../res/tools/light.png", "욱재 전광판", "Light"));
+        tools.put("수학의 정석", new Tools(2000.0, "../res/tools/math.jpg", "수학의 정석", "Math"));
+        tools.put("JMS", new Tools(5000.0, "../res/tools/teacher.jpg", "JMS의 손짓", "Teacher"));
+        tools.put("벤젠", new Tools(100000.0, "../res/tools/benzene.png", "벤젠", "Benzene"));
 
         setListView(tools);
 
-        doors = new HashMap<>();
+		// 초기 문 설정
+		doorOrder.add(new Doors(3000, "../res/doors/wood.jpg", "나무문"));
+		doorOrder.add(new Doors(5000, "../res/doors/glass.jpg", "유리문"));
+//			new Doors(7000, "hardglass.png", "강화유리문"),
+//			new Doors(3000, "stone.png", "돌문"),
+//			new Doors(3000, "steel.png", "철문"),
+//			new Doors(3000, "stomach.png", "명치"),
+//			new Doors(3000, "secretary.png", "사무국장실문"),
+//			new Doors(3000, "diamond.png", "다이아문")
 
-        doors.put("나무문", new Doors(3000, "wood.jpg", "나무문"));
-        doors.put("유리문", new Doors(5000, "glass.jpg", "유리문"));
-        doors.put("강화유리문", new Doors(7000, "hardglass.png", "강화유리문"));
-        doors.put("돌문", new Doors(3000, "stone.png", "돌문"));
-        doors.put("철문", new Doors(3000, "steel.png", "철문"));
-        doors.put("명치", new Doors(3000, "stomach.png", "명치"));
-        doors.put("사무국장실문", new Doors(3000, "secretary.png", "사무국장실문"));
-        doors.put("다이아문", new Doors(3000, "diamond.png", "다이아문"));
-
-        currentDoor = doors.get("나무문");
+		iterator = doorOrder.iterator();
+		currentDoor = iterator.next();
         currentTool = tools.get("손");
+
+		door = new ImageView();
+		door.setFitWidth(225);
+		door.setFitHeight(400);
+		door.setLayoutX(296);
+		door.setLayoutY(80);
+		door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
+		door.setOnMouseClicked(event -> {
+			handleKnock();
+			checkHealth();
+		});
+
+		View.getChildren().add(door);
     }
 
     // ListView 초기화 (Tool 메뉴)
@@ -244,6 +267,8 @@ public class GameController implements Initializable{
             // 이렇게 만든 HBox를 toolsPanel(ListView)에 넣어준다.
             toolsPanel.getItems().add(hBox);
         }
+
+
     }
 
 }
