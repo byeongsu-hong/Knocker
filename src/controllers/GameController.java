@@ -154,21 +154,23 @@ public class GameController implements Initializable{
         tools.put("깔리", new Tools(300.0, "curry.png", "깔리"));
         tools.put("망치", new Tools(700.0, "hammer.png", "망치"));
 		tools.put("욱재 전광판", new Tools(3000.0, "light.png", "욱재 전광판"));
-        tools.put("수학의 정석", new Tools(11000.0, "math.jpg", "수학의 정석"));
+        tools.put("수학의 정석", new Tools(7000.0, "math.jpg", "수학의 정석"));
+        tools.put("반달 돌칼", new Tools(10000.0, "halfmoon.png", "반달 돌칼"));
+        tools.put("벤젠", new Tools(50000.0, "benzene.png", "벤젠"));
         tools.put("JMS의 손짓", new Tools(100000.0, "teacher.jpg", "JMS의 손짓"));
-        tools.put("벤젠", new Tools(7000.0, "benzene.png", "벤젠"));
+
 
         setListView(tools);
 
 		// 초기 문 설정
 		doorOrder.add(new Doors(3000, "wood.jpg", "나무문"));
-		doorOrder.add(new Doors(5000, "glass.jpg", "유리문"));
-		doorOrder.add(new Doors(7000, "stone.jpg", "돌문"));
-		doorOrder.add(new Doors(30000, "steel.png", "철문"));
-		doorOrder.add(new Doors(70000, "stomach.jpg", "명치"));
-//		doorOrder.add(new Doors(110000, "diamond.png", "다이아문"));
-//		doorOrder.add(new Doors(1000000, "secretary.png", "사무국장실문"));
-		doorOrder.add(new Doors(77777777, "heart.jpeg", "심쿵"));
+		doorOrder.add(new Doors(7000, "glass.jpg", "유리문"));
+		doorOrder.add(new Doors(10000, "stone.jpg", "돌문"));
+		doorOrder.add(new Doors(50000, "steel.png", "철문"));
+		doorOrder.add(new Doors(100000, "stomach.jpg", "명치"));
+		doorOrder.add(new Doors(700000, "diamond.jpg", "다이아문"));
+		doorOrder.add(new Doors(1000000, "secretary.jpg", "야외점호의 문"));
+		doorOrder.add(new Doors(7777777, "heart.jpeg", "심쿵"));
 
 		iterator = doorOrder.iterator();
 		currentDoor = iterator.next();
