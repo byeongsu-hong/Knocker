@@ -54,6 +54,98 @@ public class GameController implements Initializable{
 	private ImageView door;
 	private Iterator<Doors> iterator;
 
+    // FXML문서가 처음으로 Load되었을 때, 초기화 해주는 메소드.
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        doorHealth.setProgress(1.0);
+
+        tools = new LinkedHashMap<>();
+
+        tools.put("손", new Tools(30.0, "fist.png", "손"));
+        tools.put("신발", new Tools(54.0, "shoes.png", "신발"));
+        tools.put("바비인형", new Tools(97.2, "bobby.png", "바비인형"));
+        tools.put("깔리", new Tools(174.96, "curry.png", "깔리"));
+        tools.put("망치", new Tools(314.928, "hammer.png", "망치"));
+        tools.put("욱재 전광판", new Tools(566.8704, "light.png", "욱재 전광판"));
+        tools.put("수학의 정석", new Tools(1020.36672, "math.jpg", "수학의 정석"));
+        tools.put("반달 돌칼", new Tools(1836.660096, "halfmoon.png", "반달 돌칼"));
+        tools.put("벤젠", new Tools(3305.9881728, "benzene.png", "벤젠"));
+        tools.put("JMS의 손짓", new Tools(5950.77871104, "teacher.jpg", "JMS의 손짓"));
+
+        setListView(tools);
+
+        // 초기 문 설정
+        doorOrder.add(new Doors(1260.0, "wood.jpg", "나무문"));
+        doorOrder.add(new Doors(2772.0, "glass.jpg", "유리문"));
+        doorOrder.add(new Doors(6098.4, "stone.jpg", "돌문"));
+        doorOrder.add(new Doors(13416.48, "steel.png", "철문"));
+        doorOrder.add(new Doors(29516.256, "stomach.jpg", "명치"));
+        doorOrder.add(new Doors(64935.7632, "diamond.jpg", "다이아문"));
+        doorOrder.add(new Doors(142858.67904, "secretary.jpg", "야외점호의 문"));
+
+        // 지금까지 최종보스
+        doorOrder.add(new Doors(1571445.46944, "heart.jpeg", "심쿵"));
+
+        iterator = doorOrder.iterator();
+        currentDoor = iterator.next();
+        doorName.setText(currentDoor.getDoorName());
+        handleTools("손");
+
+        door = new ImageView();
+        door.setFitWidth(225);
+        door.setFitHeight(400);
+        door.setLayoutX(296);
+        door.setLayoutY(80);
+        door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
+        door.setOnMouseClicked(event -> {
+            handleKnock();
+            checkHealth();
+        });
+
+        View.getChildren().add(door);
+    }
+
+    // ListView 초기화 (Tool 메뉴)
+    private void setListView(Map<String, Tools> tools) {
+        toolsPanel.setLayoutX(800.0);
+        toolsPanel.setPrefHeight(480.0);
+        toolsPanel.setPrefWidth(200.0);
+
+        for(Tools tool : tools.values()){
+
+            // HBox 생성
+            HBox hBox = new HBox();
+            hBox.setAlignment(Pos.CENTER_LEFT);
+            hBox.setSpacing(20.0);
+
+            // 마우스 이벤트 처리
+            hBox.setOnMouseClicked(event -> {
+                toolInfo.setText("Current Tool : " + tool.getToolName());
+                handleTools(tool.getToolName());
+            });
+
+            // 도구 이미지 생성
+            ImageView toolImage = new ImageView();
+            toolImage.setFitHeight(50.0);
+            toolImage.setFitWidth(50.0);
+            toolImage.setImage(new Image(String.valueOf(getClass().getResource(tool.getToolFile()))));
+
+            // 도구 이름 생성
+            Label toolDesc = new Label();
+            toolDesc.setText(tool.getToolName());
+
+            // HBox에 도구 이미지와, 도구 이름을 넣어준다.
+            hBox.getChildren().add(toolImage);
+            hBox.getChildren().add(toolDesc);
+
+            // 이렇게 만든 HBox를 toolsPanel(ListView)에 넣어준다.
+            toolsPanel.getItems().add(hBox);
+        }
+
+
+
+    }
+
     // 문의 체력을 체크하고, 만약 문의 체력이 0 이하일 경우 문을 없앤다.
     private void checkHealth() {
 
@@ -139,97 +231,6 @@ public class GameController implements Initializable{
     private void showNotification(String message) {
         notification.getItems().add("System : " + message);
         notification.scrollTo(notification.getItems().size());
-    }
-
-    // FXML문서가 처음으로 Load되었을 때, 초기화 해주는 메소드.
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        doorHealth.setProgress(1.0);
-
-        tools = new LinkedHashMap<>();
-
-        tools.put("손", new Tools(30.0, "fist.png", "손"));
-        tools.put("신발", new Tools(50.0, "shoes.png", "신발"));
-        tools.put("바비인형", new Tools(70.0, "bobby.png", "바비인형"));
-        tools.put("깔리", new Tools(300.0, "curry.png", "깔리"));
-        tools.put("망치", new Tools(700.0, "hammer.png", "망치"));
-		tools.put("욱재 전광판", new Tools(3000.0, "light.png", "욱재 전광판"));
-        tools.put("수학의 정석", new Tools(7000.0, "math.jpg", "수학의 정석"));
-        tools.put("반달 돌칼", new Tools(10000.0, "halfmoon.png", "반달 돌칼"));
-        tools.put("벤젠", new Tools(50000.0, "benzene.png", "벤젠"));
-        tools.put("JMS의 손짓", new Tools(100000.0, "teacher.jpg", "JMS의 손짓"));
-
-
-        setListView(tools);
-
-		// 초기 문 설정
-		doorOrder.add(new Doors(3000, "wood.jpg", "나무문"));
-		doorOrder.add(new Doors(7000, "glass.jpg", "유리문"));
-		doorOrder.add(new Doors(10000, "stone.jpg", "돌문"));
-		doorOrder.add(new Doors(50000, "steel.png", "철문"));
-		doorOrder.add(new Doors(100000, "stomach.jpg", "명치"));
-		doorOrder.add(new Doors(700000, "diamond.jpg", "다이아문"));
-		doorOrder.add(new Doors(1000000, "secretary.jpg", "야외점호의 문"));
-		doorOrder.add(new Doors(7777777, "heart.jpeg", "심쿵"));
-
-		iterator = doorOrder.iterator();
-		currentDoor = iterator.next();
-        doorName.setText(currentDoor.getDoorName());
-        handleTools("손");
-
-		door = new ImageView();
-		door.setFitWidth(225);
-		door.setFitHeight(400);
-		door.setLayoutX(296);
-		door.setLayoutY(80);
-		door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
-		door.setOnMouseClicked(event -> {
-			handleKnock();
-			checkHealth();
-		});
-
-		View.getChildren().add(door);
-    }
-
-    // ListView 초기화 (Tool 메뉴)
-    private void setListView(Map<String, Tools> tools) {
-        toolsPanel.setLayoutX(800.0);
-        toolsPanel.setPrefHeight(480.0);
-        toolsPanel.setPrefWidth(200.0);
-
-        for(Tools tool : tools.values()){
-
-            // HBox 생성
-            HBox hBox = new HBox();
-            hBox.setAlignment(Pos.CENTER_LEFT);
-            hBox.setSpacing(20.0);
-
-            // 마우스 이벤트 처리
-            hBox.setOnMouseClicked(event -> {
-                toolInfo.setText("Current Tool : " + tool.getToolName());
-                handleTools(tool.getToolName());
-            });
-
-            // 도구 이미지 생성
-            ImageView toolImage = new ImageView();
-            toolImage.setFitHeight(50.0);
-            toolImage.setFitWidth(50.0);
-            toolImage.setImage(new Image(String.valueOf(getClass().getResource(tool.getToolFile()))));
-
-            // 도구 이름 생성
-            Label toolDesc = new Label();
-            toolDesc.setText(tool.getToolName());
-
-            // HBox에 도구 이미지와, 도구 이름을 넣어준다.
-            hBox.getChildren().add(toolImage);
-            hBox.getChildren().add(toolDesc);
-
-            // 이렇게 만든 HBox를 toolsPanel(ListView)에 넣어준다.
-            toolsPanel.getItems().add(hBox);
-        }
-
-
-
     }
 
 	//문 생성 시 애니메이션
