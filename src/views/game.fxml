@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="View" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GameController">
+   <children>
+      <Rectangle fx:id="door" arcHeight="5.0" arcWidth="5.0" fill="#3f51b5" height="393.0" layoutX="280.0" layoutY="87.0" onMouseClicked="#handleKnock" stroke="BLACK" strokeType="INSIDE" width="241.0" />
+      <Button fx:id="toolsBtn" layoutX="745.0" layoutY="87.0" mnemonicParsing="false" onAction="#openSideMenu" style="-fx-background-color: #03a9f4; -fx-background-radius: none;" text="Tools" textFill="WHITE">
+         <font>
+            <Font name="Arial" size="14.0" />
+         </font>
+      </Button>
+      <ListView fx:id="toolsPanel" layoutX="800.0" prefHeight="480.0" prefWidth="200.0" style="-fx-fixed-cell-size: 64;" />
+      <Label fx:id="currentMoney" layoutX="14.0" layoutY="14.0" text="Money : 1000000" />
+      <Label fx:id="toolInfo" layoutX="14.0" layoutY="30.0" text="Current Tool : 손" />
+      <ProgressBar fx:id="doorHealth" layoutX="185.0" layoutY="36.0" prefHeight="39.0" prefWidth="429.0" />
+      <Label fx:id="notification" alignment="CENTER" layoutX="152.0" layoutY="480.0" prefHeight="39.0" prefWidth="497.0" style="-fx-background-color: #fff; -fx-border-color: black; -fx-border-width: 2px;" text="이것은 알림 메세지가 표시되는 놈" AnchorPane.bottomAnchor="-39.0" AnchorPane.leftAnchor="152.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="480.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Label>
+   </children>
+
+</AnchorPane>
