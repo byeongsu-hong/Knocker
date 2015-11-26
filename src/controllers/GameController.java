@@ -3,6 +3,7 @@ package controllers;
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -36,14 +37,13 @@ public class GameController implements Initializable{
     @FXML private ProgressBar doorHealth;
     @FXML private Button toolsBtn;
     @FXML private ListView<HBox> toolsPanel;
-    @FXML private ListView<String> notification;
     @FXML private Label currentMoney;
     @FXML private Label toolInfo;
+    @FXML private Label notification;
 
     /** Variables **/
     private Doors currentDoor;
     private Tools currentTool;
-    private Map<String, Doors> doors;
     private Map<String, Tools> tools;
     private boolean isTimeToOpen = true;
 	private List<Doors> doorOrder = new ArrayList<>();
@@ -53,17 +53,43 @@ public class GameController implements Initializable{
 
     // 문의 체력을 체크하고, 만약 문의 체력이 0 이하일 경우 문을 없앤다.
     private void checkHealth() {
+
+		Doors previousDoor = currentDoor;
         if(doorHealth.getProgress() <= 1.3877787807814457E-16) {
-            showNotification("\'" + currentDoor.getDoorName() + "\'이/가 파괴되었다!");
-            View.getChildren().remove(door);
+			notification.setText("\'" + previousDoor.getDoorName() + "\'이/가 파괴되었다!");
+			Task noti = new Task() {
+				@Override
+				protected Object call() throws Exception {
+					showNotification();
+					return null;
+				}
+			};
+
+			View.getChildren().remove(door);
 
 			if(iterator.hasNext()) {
 				currentDoor = iterator.next();
-                door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
+				door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
+				door.setFitWidth(90);
+				door.setFitHeight(160);
 				View.getChildren().add(door);
-			}
+				Task spawn = new Task() {
+					@Override
+					protected Object call() throws Exception {
+						spawnDoorAnim(door);
+						return null;
+					}
+				};
 
-            doorHealth.setProgress(1);
+				Thread sp = new Thread(spawn);
+				sp.start();
+			}
+			doorHealth.setProgress(1);
+
+			Thread th1 = new Thread(noti);
+
+			th1.start();
+
         }
     }
 
@@ -77,47 +103,38 @@ public class GameController implements Initializable{
     /** 도구 핸들러들 **/
     public void handleFist() {
         currentTool = tools.get("손");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleShoes() {
         currentTool = tools.get("신발");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleHammer() {
         currentTool = tools.get("망치");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleBenzene() {
         currentTool = tools.get("벤젠");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleLight() {
         currentTool = tools.get("욱재 전광판");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleBobby() {
         currentTool = tools.get("바비인형");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleCurry() {
         currentTool = tools.get("깔리");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleMath() {
         currentTool = tools.get("수학의 정석");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleTeacher() {
         currentTool = tools.get("JMS");
-        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
     /** 끗 **/
 
@@ -161,9 +178,33 @@ public class GameController implements Initializable{
     }
 
     // 문이 파괴되었을 때나, 알려줄 것이 있을 때, 알림창을 띄워주는 메소드
-    private void showNotification(String message) {
-        notification.getItems().add("System : " + message);
-        notification.scrollTo(notification.getItems().size());
+    private void showNotification() {
+
+
+        TranslateTransition open = new TranslateTransition();
+        open.setNode(notification);
+		open.setToY(notification.getTranslateY() - 100);
+		open.setDuration(new Duration(500));
+		open.setInterpolator(Interpolator.EASE_BOTH);
+        open.play();
+
+        TranslateTransition close = new TranslateTransition();
+        close.setNode(notification);
+        close.setToY(notification.getTranslateY() + 100);
+        close.setDuration(new Duration(500));
+        close.setInterpolator(Interpolator.EASE_BOTH);
+
+        open.setOnFinished(event -> {
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			close.play();
+			System.out.println("으으으으으으으ㅡ으앙아ㅏ아아아앙");
+		});
+
+
     }
 
     // FXML문서가 처음으로 Load되었을 때, 초기화 해주는 메소드.
@@ -171,7 +212,7 @@ public class GameController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         doorHealth.setProgress(1.0);
 
-        tools = new LinkedHashMap<>();
+        tools = new HashMap<>();
 
         tools.put("손", new Tools(50.0, "../res/tools/fist.png", "손", "Fist"));
         tools.put("신발", new Tools(100.0, "../res/tools/shoes.png", "신발", "Shoes"));
@@ -194,6 +235,8 @@ public class GameController implements Initializable{
 //			new Doors(3000, "stomach.png", "명치"),
 //			new Doors(3000, "secretary.png", "사무국장실문"),
 //			new Doors(3000, "diamond.png", "다이아문")
+
+		notification.setText("njnj");
 
 		iterator = doorOrder.iterator();
 		currentDoor = iterator.next();
@@ -258,6 +301,15 @@ public class GameController implements Initializable{
         }
 
 
+
     }
+
+	//문 생성 시 애니메이션
+	public void spawnDoorAnim(ImageView door) {
+		ScaleTransition st = new ScaleTransition(Duration.millis(2000), door);
+		st.setToX((double)225/90);
+		st.setToY((double)400/160);
+		st.play();
+	}
 
 }
