@@ -36,9 +36,9 @@ public class GameController implements Initializable{
     @FXML private ProgressBar doorHealth;
     @FXML private Button toolsBtn;
     @FXML private ListView<HBox> toolsPanel;
+    @FXML private ListView<String> notification;
     @FXML private Label currentMoney;
     @FXML private Label toolInfo;
-    @FXML private Label notification;
 
     /** Variables **/
     private Doors currentDoor;
@@ -56,13 +56,14 @@ public class GameController implements Initializable{
         if(doorHealth.getProgress() <= 1.3877787807814457E-16) {
             showNotification("\'" + currentDoor.getDoorName() + "\'이/가 파괴되었다!");
             View.getChildren().remove(door);
+
 			if(iterator.hasNext()) {
 				currentDoor = iterator.next();
-				door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
+                door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
 				View.getChildren().add(door);
 			}
-            doorHealth.setProgress(1);
 
+            doorHealth.setProgress(1);
         }
     }
 
@@ -76,38 +77,47 @@ public class GameController implements Initializable{
     /** 도구 핸들러들 **/
     public void handleFist() {
         currentTool = tools.get("손");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleShoes() {
         currentTool = tools.get("신발");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleHammer() {
         currentTool = tools.get("망치");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleBenzene() {
         currentTool = tools.get("벤젠");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleLight() {
         currentTool = tools.get("욱재 전광판");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleBobby() {
         currentTool = tools.get("바비인형");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleCurry() {
         currentTool = tools.get("깔리");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleMath() {
         currentTool = tools.get("수학의 정석");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
 
     public void handleTeacher() {
         currentTool = tools.get("JMS");
+        showNotification("현재 도구는 \'" +currentTool.getToolName()+ "\' 입니다");
     }
     /** 끗 **/
 
@@ -152,29 +162,8 @@ public class GameController implements Initializable{
 
     // 문이 파괴되었을 때나, 알려줄 것이 있을 때, 알림창을 띄워주는 메소드
     private void showNotification(String message) {
-        notification.setText(message);
-
-        TranslateTransition open = new TranslateTransition();
-        open.setNode(notification);
-        open.setToY(notification.getTranslateY() - 100);
-        open.setDuration(new Duration(500));
-        open.setInterpolator(Interpolator.EASE_BOTH);
-        open.play();
-
-        TranslateTransition close = new TranslateTransition();
-        close.setNode(notification);
-        close.setToY(notification.getTranslateY() + 100);
-        close.setDuration(new Duration(500));
-        close.setInterpolator(Interpolator.EASE_BOTH);
-
-        open.setOnFinished(event -> {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            close.play();
-        });
+        notification.getItems().add("System : " + message);
+        notification.scrollTo(notification.getItems().size());
     }
 
     // FXML문서가 처음으로 Load되었을 때, 초기화 해주는 메소드.

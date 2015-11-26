@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -18,17 +16,7 @@
       <Label fx:id="currentMoney" layoutX="14.0" layoutY="14.0" text="Money : 1000000" />
       <Label fx:id="toolInfo" layoutX="14.0" layoutY="30.0" text="Current Tool : 손" />
       <ProgressBar fx:id="doorHealth" layoutX="185.0" layoutY="36.0" prefHeight="39.0" prefWidth="429.0" />
-      <Label fx:id="notification" alignment="CENTER" layoutX="152.0" layoutY="480.0" prefHeight="39.0" prefWidth="497.0" style="-fx-background-color: #fff; -fx-border-color: black; -fx-border-width: 2px;" text="이것은 알림 메세지가 표시되는 놈" AnchorPane.bottomAnchor="-39.0" AnchorPane.leftAnchor="152.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="480.0">
-         <font>
-            <Font size="20.0" />
-         </font>
-         <padding>
-            <Insets left="10.0" right="10.0" />
-         </padding>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </Label>
+      <ListView fx:id="notification" layoutY="362.0" prefHeight="118.0" prefWidth="270.0" />
    </children>
 
 </AnchorPane>
