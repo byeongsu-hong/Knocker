@@ -9,6 +9,7 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.ImageCursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -39,7 +40,9 @@ public class GameController implements Initializable{
     @FXML private ListView<HBox> toolsPanel;
     @FXML private Label currentMoney;
     @FXML private Label toolInfo;
+    @FXML private Label doorName;
     @FXML private ListView<String> notification;
+
 
     /** Variables **/
     private Doors currentDoor;
@@ -61,14 +64,19 @@ public class GameController implements Initializable{
 
 			if(iterator.hasNext()) {
 				currentDoor = iterator.next();
+                doorName.setText(currentDoor.getDoorName());
                 door.setImage(new Image(String.valueOf(getClass().getResource(currentDoor.getDoorFile()))));
                 door.setFitWidth(90);
 				door.setFitHeight(160);
+                System.out.println(door.getFitHeight() + ", " + door.getFitWidth());
                 door.setLayoutX(355);
                 door.setLayoutY(200);
                 View.getChildren().add(door);
 				spawnDoorAnim(door);
-			}
+                System.out.println(door.getFitHeight() + ", " + door.getFitWidth());
+                door.setScaleX((double)90/225);
+                door.setScaleY((double)160/400);
+            }
 
 			doorHealth.setProgress(1);
         }
@@ -85,6 +93,7 @@ public class GameController implements Initializable{
     public void handleTools(String name) {
         currentTool = tools.get(name);
         showNotification("현재 도구는 \'" + name + "\' 입니다");
+        View.setCursor(new ImageCursor(new Image(String.valueOf(getClass().getResource(currentTool.getToolFile())))));
     }
 
     // 툴 버튼을 눌렀을 때, Tool들이 있는 ListView를 보여주는 메소드.
@@ -139,31 +148,32 @@ public class GameController implements Initializable{
 
         tools = new LinkedHashMap<>();
 
-        tools.put("손", new Tools(50.0, "fist.png", "손"));
-        tools.put("신발", new Tools(100.0, "shoes.png", "신발"));
-        tools.put("바비인형", new Tools(200.0, "bobby.png", "바비인형"));
+        tools.put("손", new Tools(30.0, "fist.png", "손"));
+        tools.put("신발", new Tools(50.0, "shoes.png", "신발"));
+        tools.put("바비인형", new Tools(70.0, "bobby.png", "바비인형"));
         tools.put("깔리", new Tools(300.0, "curry.png", "깔리"));
-        tools.put("망치", new Tools(500.0, "hammer.png", "망치"));
-		tools.put("욱재 전광판", new Tools(1000.0, "light.png", "욱재 전광판"));
-        tools.put("수학의 정석", new Tools(2000.0, "math.jpg", "수학의 정석"));
-        tools.put("JMS의 손짓", new Tools(5000.0, "teacher.jpg", "JMS의 손짓"));
-        tools.put("벤젠", new Tools(100000.0, "benzene.png", "벤젠"));
+        tools.put("망치", new Tools(700.0, "hammer.png", "망치"));
+		tools.put("욱재 전광판", new Tools(3000.0, "light.png", "욱재 전광판"));
+        tools.put("수학의 정석", new Tools(11000.0, "math.jpg", "수학의 정석"));
+        tools.put("JMS의 손짓", new Tools(100000.0, "teacher.jpg", "JMS의 손짓"));
+        tools.put("벤젠", new Tools(7000.0, "benzene.png", "벤젠"));
 
         setListView(tools);
 
 		// 초기 문 설정
 		doorOrder.add(new Doors(3000, "wood.jpg", "나무문"));
 		doorOrder.add(new Doors(5000, "glass.jpg", "유리문"));
-//			new Doors(7000, "hardglass.png", "강화유리문"),
-//			new Doors(3000, "stone.png", "돌문"),
-//			new Doors(3000, "steel.png", "철문"),
-//			new Doors(3000, "stomach.png", "명치"),
-//			new Doors(3000, "secretary.png", "사무국장실문"),
-//			new Doors(3000, "diamond.png", "다이아문")
+		doorOrder.add(new Doors(7000, "stone.jpg", "돌문"));
+		doorOrder.add(new Doors(30000, "steel.png", "철문"));
+		doorOrder.add(new Doors(70000, "stomach.jpg", "명치"));
+//		doorOrder.add(new Doors(110000, "diamond.png", "다이아문"));
+//		doorOrder.add(new Doors(1000000, "secretary.png", "사무국장실문"));
+		doorOrder.add(new Doors(77777777, "heart.jpeg", "심쿵"));
 
 		iterator = doorOrder.iterator();
 		currentDoor = iterator.next();
-        currentTool = tools.get("손");
+        doorName.setText(currentDoor.getDoorName());
+        handleTools("손");
 
 		door = new ImageView();
 		door.setFitWidth(225);
@@ -222,7 +232,7 @@ public class GameController implements Initializable{
 
 	//문 생성 시 애니메이션
 	public void spawnDoorAnim(ImageView door) {
-		ScaleTransition st = new ScaleTransition(Duration.millis(100), door);
+		ScaleTransition st = new ScaleTransition(Duration.millis(500), door);
 		st.setToX((double)225/90);
 		st.setToY((double)400/160);
 		st.play();

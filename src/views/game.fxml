@@ -17,6 +17,11 @@
       <Label fx:id="toolInfo" layoutX="14.0" layoutY="30.0" text="Current Tool : 손" />
       <ProgressBar fx:id="doorHealth" layoutX="185.0" layoutY="10.0" prefHeight="39.0" prefWidth="429.0" />
       <ListView fx:id="notification" layoutY="362.0" prefHeight="118.0" prefWidth="270.0" />
+      <Label fx:id="doorName" layoutX="14.0" layoutY="206.0">
+         <font>
+            <Font size="56.0" />
+         </font>
+      </Label>
    </children>
 
 </AnchorPane>
