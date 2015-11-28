@@ -13,6 +13,7 @@ import java.io.IOException;
  * Created by frostornge on 15. 11. 24.
  */
 public class MainController {
+
     public void handleStartButtonAction(ActionEvent event) {
         Parent root = null;
 
@@ -28,4 +29,5 @@ public class MainController {
 
         App.stage.show();
     }
+
 }

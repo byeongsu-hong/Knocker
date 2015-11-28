@@ -5,17 +5,19 @@ package controllers;
  */
 public class Tools {
 
+    // Fields
     private final double Power;
     private String toolName;
     private String toolFile;
-    private String toolMethod;
 
+	// Constructor
     public Tools(double power, String toolFile, String toolName) {
         this.toolName = toolName;
         this.toolFile = "../res/tools/" + toolFile;
         this.Power = power;
     }
 
+	// Getters
     public String getToolFile() {
         return this.toolFile;
     }
